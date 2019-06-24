@@ -5,13 +5,13 @@
                 <img src="../../assets/img/logo.jpg" alt="">
             </div>
             <Form ref="formInline" :model="formInline" :rules="ruleInline">
-                <FormItem prop="user" label="user name">
-                    <Input type="text" v-model="formInline.user" placeholder="Username">
+                <FormItem prop="UserName" label="user name">
+                    <Input type="text" v-model="formInline.UserName" placeholder="Username">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
-                <FormItem prop="password" label="password">
-                    <Input type="password" v-model="formInline.password" placeholder="Password">
+                <FormItem prop="UserPwd" label="password">
+                    <Input type="password" v-model="formInline.UserPwd" placeholder="Password">
                     <Icon type="ios-lock-outline" slot="prepend"></Icon>
                     </Input>
                 </FormItem>
@@ -28,24 +28,26 @@
 </template>
 
 <script>
+import BMap from 'BMap'
 export default {
     name: 'loginPage',
     created(){
-        this.$api.loginPageApi.login({});
+        this.getAddress();
     },
     data () {
         return {
             formInline: {
-                user: 'Mick',
-                password: '123456'
+                UserName: 'liuan',
+                UserPwd: '123456',
+                city: ''
             },
             ruleInline: {
                 user: [
-                    { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                    { required: true, message: '请输入用户账号...', trigger: 'blur' }
                 ],
                 password: [
-                    { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                    { required: true, message: '请输入用户密码...', trigger: 'blur' },
+                    { type: 'string', min: 6, message: '密码长度不能小于6位...', trigger: 'blur' }
                 ]
             }
         }
@@ -54,13 +56,44 @@ export default {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$router.push('/homePage');
-                    this.$Message.success('Success!');
+                    this.$api.loginPageApi.login(this.formInline).then(data=>{
+                        console.log(data);
+                        if (data.code == '1'){
+                            localStorage.setItem('token',data.data.Token);
+                            this.$router.push('/homePage');
+                        }else{
+                            this.$Message.error(data.msg);
+                        }
+                    });
                 } else {
                     this.$Message.error('滚!');
                 }
             })
+        },
+        getAddress(){
+            let _this = this
+            var geolocation = new BMap.Geolocation()
+            geolocation.getCurrentPosition(function(r) {
+                if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                    const myGeo = new BMap.Geocoder()
+                    myGeo.getLocation(new BMap.Point(r.point.lng, r.point.lat), data => {
+                        if (data.addressComponents) {
+                            const result = data.addressComponents
+                            const location = {
+                                creditProvince: result.province || '', // 省
+                                creditCity: result.city || '', // 市
+                                creditArea: result.district || '', // 区
+                                creditStreet: (result.street || '') + (result.streetNumber || '') // 街道
+                            }
+                            _this.formInline.city = location.creditProvince + location.creditCity + location.creditArea;
+                        }
+                    })
+                }
+            })
         }
+    },
+    mounted(){
+        this.getAddress();
     }
 }
 </script>

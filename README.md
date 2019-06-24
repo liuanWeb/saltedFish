@@ -5,16 +5,21 @@
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动项目
 npm run dev
 
-# build for production with minification
+# 打包文件
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
+```
 
+## git 提交
+```
+- 拷贝项目：git clone 'github地址' 
+- 添加文件：git add .
+- 提交信息：git commit -m '注释'
+- 上传更新：ggit push -u origin master
 ```

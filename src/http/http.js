@@ -2,6 +2,7 @@
 import axios from 'axios';
 import QS from 'qs';
 
+
 // 环境的切换
 axios.defaults.timeout = 10000;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -12,13 +13,11 @@ axios.interceptors.request.use(
 config => {
   // 每次发送请求之前判断vuex中是否存在token
   // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
-  // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-  // const token = store.state.token;
-  // token && (config.headers.Authorization = token);
-  // let sid = localStorage.getItem('sid');
-  // if(sid){
-  //   config.headers['sid'] = sid;
-  // }
+  let Token = localStorage.getItem('token');
+  console.log(Token);
+  if(Token){
+    config.headers['token'] = Token;
+  }
   return config;
 },
 error => {
@@ -30,8 +29,9 @@ axios.interceptors.response.use(
     // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
     // 否则的话抛出错误
     if (response.status === 200) {
-      if(!(response.data.code == '0000' || response.data.code == '1')){
-        this.$Message.error(response.data.message?response.data.message:response.data.msg);
+      if(!(response.data.code == '0')){
+        // this.$Message(response.data.msg);
+        console.log(response.data.msg);
       }
       return Promise.resolve(response);
     } else {
@@ -41,7 +41,7 @@ axios.interceptors.response.use(
   },
   error => {
     if (error) {
-      this.$Message.error('网络异常');
+      // this.$Message.error('网络异常');
       return Promise.reject(error);
     }
 });
@@ -52,9 +52,9 @@ axios.interceptors.response.use(
 export function get(url, params){
   return new Promise((resolve, reject) =>{
     axios.get(url, QS.stringify(params)).then(res => {
-      resolve(res);
+      resolve(res.data);
     }).catch(err =>{
-      reject(err)
+      reject(err.data)
     })
   });
 }
@@ -69,7 +69,7 @@ export function post(url, params) {
         resolve(res.data);
       })
       .catch(err =>{
-        reject(err.data)
+        reject(err)
       })
   });
 }

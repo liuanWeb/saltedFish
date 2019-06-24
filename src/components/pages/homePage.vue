@@ -74,11 +74,13 @@
 export default {
     name: 'homePage',
     created(){
-
+        this.$api.homePageApi.getMenu().then(data=>{
+            this.menuData = data.data;
+        });
     },
     data () {
         return {
-
+            menuData: [], // 导航数据
         }
     },
     methods: {

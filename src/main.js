@@ -16,6 +16,8 @@ Vue.use(iView);
 import api from './http/api' // 导入api接口
 Vue.prototype.$api = api; // 将api挂载到vue的原型上复制代码
 
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
