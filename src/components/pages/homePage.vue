@@ -30,15 +30,13 @@
             </div>
         </div>
         <div class="content">
-            <Menu active-name="1-1" :open-names="['1']">
+            <Menu>
                 <Submenu :name="item.MenuId" v-for="(item,index) in menuData" :key="index">
                     <template slot="title">
                         <Icon type="ios-paper" />
                         {{item.MenuName}}
                     </template>
-                    <MenuItem name="1-1">文章管理</MenuItem>
-                    <MenuItem name="1-2">评论管理</MenuItem>
-                    <MenuItem name="1-3">举报管理</MenuItem>
+                    <MenuItem :name="subItem.MenuId" v-for="(subItem, subIndex) in item.SubLevelMenus" :key="subIndex">{{subItem.MenuName}}</MenuItem>
                 </Submenu>
             </Menu>
             <router-view class="page" />
@@ -66,6 +64,7 @@ export default {
         },
         signOut(){
             this.$router.push('/loginPage');
+            localStorage.remove('token');
             this.$Message.warning('已退出登录！')
         }
     }
