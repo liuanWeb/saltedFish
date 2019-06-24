@@ -36,8 +36,8 @@ export default {
     data () {
         return {
             formInline: {
-                user: '',
-                password: ''
+                user: 'Mick',
+                password: '123456'
             },
             ruleInline: {
                 user: [
@@ -54,9 +54,10 @@ export default {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    this.$router.push('/homePage');
                     this.$Message.success('Success!');
                 } else {
-                    this.$Message.error('Fail!');
+                    this.$Message.error('滚!');
                 }
             })
         }
