@@ -1,6 +1,7 @@
 // 封装 axios
 import axios from 'axios';
 import QS from 'qs';
+import Message from 'iview/src/components/message'
 
 
 // 环境的切换
@@ -14,7 +15,7 @@ config => {
   // 每次发送请求之前判断vuex中是否存在token
   // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
   let Token = localStorage.getItem('token');
-  console.log(Token);
+  // console.log(Token);
   if(Token){
     config.headers['token'] = Token;
   }
@@ -29,13 +30,13 @@ axios.interceptors.response.use(
     // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
     // 否则的话抛出错误
     if (response.status === 200) {
-      if(!(response.data.code == '0')){
-        // this.$Message(response.data.msg);
-        console.log(response.data.msg);
+      if(!(response.data.code == '1')){
+        Message.info(response.data.msg);
+        // console.log(response.data.msg);
       }
       return Promise.resolve(response);
     } else {
-      this.$Message.error('网络异常');
+      Message.error('网络异常');
       return Promise.reject(response);
     }
   },

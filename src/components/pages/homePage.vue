@@ -6,10 +6,10 @@
                 I am a Salted Fish
             </div>
             <div class="headNavBox">
-                <a class="item">设置</a>
-                <a class="item">帮助</a>
-                <a class="item">关于</a>
-                <a class="item"><Icon type="ios-notifications" /></a>
+                <router-link to="/homePage/menuPages" class="item">配置</router-link>
+                <router-link to="/homePage/helpPage" class="item">帮助</router-link>
+                <router-link to="/homePage/aboutPage" class="item">关于</router-link>
+                <router-link to="/homePage/messagePage" class="item"><Icon type="ios-notifications" /></a></router-link>
             </div>
             <div class="userBox">
                 <div class="headImg imgBox">
@@ -22,26 +22,18 @@
                         <Icon type="ios-arrow-down"></Icon>
                     </a>
                     <DropdownMenu slot="list">
-                        <DropdownItem name="userCenter">个人中心</DropdownItem>
-                        <DropdownItem name="setting">设置</DropdownItem>
-                        <DropdownItem name="signOut"><span @click="signOut()">退出</span></DropdownItem>
+                        <DropdownItem name="userCenter">
+                            <router-link to="/homePage/userCenterPage" class="item">个人中心</router-link>
+                        </DropdownItem>
+                        <DropdownItem name="setting">
+                            <router-link to="/homePage/settingPage" class="item">设置</router-link>
+                        </DropdownItem>
+                        <DropdownItem name="signOut"><a @click="signOut()">退出</a></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
         </div>
-        <div class="content">
-            <Menu>
-                <Submenu :name="item.MenuId" v-for="(item,index) in menuData" :key="index">
-                    <template slot="title">
-                        <Icon type="ios-paper" />
-                        {{item.MenuName}}
-                    </template>
-                    <MenuItem :name="subItem.MenuId" v-for="(subItem, subIndex) in item.SubLevelMenus" :key="subIndex">{{subItem.MenuName}}</MenuItem>
-                </Submenu>
-            </Menu>
-            <router-view class="page" />
-<!--            <div class="page"></div>-->
-        </div>
+        <router-view class="content" />
     </div>
 </template>
 
@@ -49,23 +41,18 @@
 export default {
     name: 'homePage',
     created(){
-        this.getMenu();
+
     },
     data () {
         return {
-            menuData: [], // 导航数据
+
         }
     },
     methods: {
-        getMenu(){
-            this.$api.homePageApi.getMenu().then(data=>{
-                this.menuData = data.data;
-            });
-        },
         signOut(){
+            localStorage.removeItem('token');
+            this.$Message.warning('已退出登录！');
             this.$router.push('/loginPage');
-            localStorage.remove('token');
-            this.$Message.warning('已退出登录！')
         }
     }
 }
