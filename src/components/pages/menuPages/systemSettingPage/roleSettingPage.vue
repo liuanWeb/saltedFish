@@ -1,12 +1,12 @@
 <template>
-    <div class="indexPage">
-        i am indexPage
+    <div class="roleSettingPage">
+        i am roleSettingPage
     </div>
 </template>
 
 <script>
 export default {
-    name: 'indexPage'
+    name: 'roleSettingPage'
 }
 </script>
 

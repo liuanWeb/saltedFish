@@ -31,7 +31,7 @@ axios.interceptors.response.use(
     // 否则的话抛出错误
     if (response.status === 200) {
       if(!(response.data.code == '1')){
-        Message.info(response.data.msg);
+        Message.error(response.data.msg);
         // console.log(response.data.msg);
       }
       return Promise.resolve(response);

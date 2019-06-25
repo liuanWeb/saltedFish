@@ -1,0 +1,18 @@
+### components
+- login
+  - loginPage                  登录页
+- pages
+  - aboutPage                  关于
+  - helpPage                   帮助
+  - menuPages                  左侧导航子页面
+    - indexPage                首页
+    - systemSettingPage        系统设置
+      - menuSettingPage        菜单管理
+      - userSettingPage        用户管理
+      - teamSettingPage        机构管理
+      - roleSettingPage        角色管理
+      - logSettingPage         操作日志
+      - 
+  - messagePage                消息
+  - settingPage                设置
+  - userCenterPage             个人中心

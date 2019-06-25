@@ -42,10 +42,10 @@ export default {
                 city: ''
             },
             ruleInline: {
-                user: [
+                UserName: [
                     { required: true, message: '请输入用户账号...', trigger: 'blur' }
                 ],
-                password: [
+                UserPwd: [
                     { required: true, message: '请输入用户密码...', trigger: 'blur' },
                     { type: 'string', min: 6, message: '密码长度不能小于6位...', trigger: 'blur' }
                 ]
@@ -57,7 +57,6 @@ export default {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.$api.loginPageApi.login(this.formInline).then(data=>{
-                        console.log(data);
                         if (data.code == '1'){
                             localStorage.setItem('token',data.data.Token);
                             this.$router.push('/homePage');

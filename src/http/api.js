@@ -7,8 +7,11 @@ const loginPageApi = {
 };
 
 const homePageApi = {
-    getMenu(){
+    getUserMenu(){
         return post('/apis/LoginAPI/UserMenu');
+    },
+    getQueryNavMenuList(pageSize,pageIndex){
+        return post('/apis/SysSetAPI/QueryNavMenuList',{pageSize: pageSize,pageIndex:pageIndex});
     }
 }
 

@@ -7,12 +7,13 @@
             </MenuItem>
             <Submenu :name="item.MenuId" v-for="(item,index) in menuData" :key="index">
                 <template slot="title">
-                    <Icon type="ios-paper" />
+                    <Icon :type="item.IconClass" />
                     {{item.MenuName}}
                 </template>
                 <MenuItem v-for="(subItem, subIndex) in item.SubLevelMenus" :key="subIndex"
-                          :name="subItem.MenuId">
-                    <Icon type="ios-paper" />{{subItem.MenuName}}
+                          :name="subItem.MenuId"
+                          :to="'/homePage/menuPages/' + item.Url + '/' + subItem.Url">
+                    <Icon :type="subItem.IconClass" />{{subItem.MenuName}}
                 </MenuItem>
             </Submenu>
         </Menu>
@@ -33,7 +34,7 @@ export default {
     },
     methods: {
         getMenu(){
-            this.$api.homePageApi.getMenu().then(data=>{
+            this.$api.homePageApi.getUserMenu().then(data=>{
                 this.menuData = data.data;
             });
         }

@@ -9,7 +9,10 @@
                 <router-link to="/homePage/menuPages" class="item">配置</router-link>
                 <router-link to="/homePage/helpPage" class="item">帮助</router-link>
                 <router-link to="/homePage/aboutPage" class="item">关于</router-link>
-                <router-link to="/homePage/messagePage" class="item"><Icon type="ios-notifications" /></a></router-link>
+                <router-link to="/homePage/messagePage" class="item">
+                    <Badge v-if="true" dot><Icon type="ios-notifications" /></Badge>
+<!--                    <Badge dot><Icon type="ios-notifications" /></Badge>-->
+                </router-link>
             </div>
             <div class="userBox">
                 <div class="headImg imgBox">
@@ -51,7 +54,7 @@ export default {
     methods: {
         signOut(){
             localStorage.removeItem('token');
-            this.$Message.warning('已退出登录！');
+            this.$Message.error('已退出登录！');
             this.$router.push('/loginPage');
         }
     }

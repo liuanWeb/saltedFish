@@ -54,9 +54,12 @@ body{
   .headNavBox{
     flex: 1;
     height: 100%;
+    display: flex;
+    align-items: center;
     .item{
       padding: 0 30px;
       font-size: 16px;
+      line-height: initial;
       color: #515a6e;
       &.router-link-active{
         color: #2d8cf0;
@@ -92,7 +95,7 @@ body{
     height: 100%;
     position: relative;
     box-sizing: border-box;
-    padding: 20px;
+    padding:10px 20px;
   }
 }
 
@@ -100,4 +103,31 @@ body{
   .ivu-tabs-nav-container{
     background:#fff;
   }
+}
+.ivu-breadcrumb{
+  &>span:last-child{
+    font-weight: normal;
+  }
+}
+
+.menuSettingPage{
+  .searchBox{
+    display: flex;
+    margin: 20px 0;
+    .ivu-input-wrapper{
+      width: 300px;
+    }
+    .ivu-btn{
+      margin-left: 10px;
+    }
+  }
+  .ivu-form-item{
+    margin-bottom: 15px;
+  }
+}
+
+.errorPage{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
