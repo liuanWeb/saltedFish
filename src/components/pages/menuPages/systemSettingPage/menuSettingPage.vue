@@ -23,9 +23,11 @@
             </Button>
         </div>
 
-        <Table border :loading="loading" ref="selection" :columns="columns" :data="menuData"
-               @on-selection-change="changeTable" @on-select-all="changeTablesAll">
-        </Table>
+        <div class="menuTable">
+            <Table border :loading="loading" ref="selection" :columns="columns" :data="menuData"
+                   @on-selection-change="changeTable" @on-select-all="changeTablesAll">
+            </Table>
+        </div>
 
         <!--   编辑/新增弹窗     -->
         <Modal v-model="popEdit" width="360"
