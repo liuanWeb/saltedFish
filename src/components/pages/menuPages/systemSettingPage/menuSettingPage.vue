@@ -31,18 +31,29 @@
 
         <!--   编辑/新增弹窗     -->
         <Modal v-model="popEdit" width="360"
-               title="菜单编辑"
+               :title="isNewOrChange=='new'?'新增菜单':'编辑菜单'"
                @on-ok="editEnter"
                @on-cancel="editCancel">
             <Form :model="editData" :label-width="70">
                 <FormItem label="菜单编号:">
-                    <Input type="number" v-model="editData.MenuId" placeholder="menu num"></Input>
+                    <Input type="number" v-model="editData.MenuId" placeholder="请输入菜单编号"></Input>
                 </FormItem>
                 <FormItem label="菜单名称:">
-                    <Input type="text" v-model="editData.MenuName" placeholder="menu name"></Input>
+                    <Input type="text" v-model="editData.MenuName" placeholder="请输入菜单名称"></Input>
+                </FormItem>
+                <FormItem label="菜单级别:">
+                    <Select v-model="editData.Level" placeholder="请选择菜单级别">
+                        <Option :value="item" v-for="(item,index) in 2" :key="index">{{item}}</Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="父级菜单:" v-if="editData.Level == '2'">
+                    <Input type="text" v-model="editData.ParentMenId" placeholder="menu parent"></Input>
+                </FormItem>
+                <FormItem label="菜单排序:">
+                    <Input type="number" v-model="editData.Seq" placeholder="请输入菜单排序"></Input>
                 </FormItem>
                 <FormItem label="菜单图标:">
-                    <Select v-model="editData.IconClass" placeholder="Select your city" style="width: 100px;">
+                    <Select v-model="editData.IconClass" placeholder="请选择菜单图标" style="width: 200px;">
                         <Option :value="item" v-for="(item,index) in IconClassList" :key="index">
                             <Icon :type="item" />
                         </Option>
@@ -50,8 +61,11 @@
                     <Icon :type="editData.IconClass" />
                 </FormItem>
                 <FormItem label="菜单路径:">
-                    <Input type="text" v-model="editData.Url" placeholder="icon"></Input>
+                    <Input type="text" v-model="editData.Url" placeholder="请输入菜单页面路径"></Input>
                 </FormItem>
+<!--                <FormItem label="是否显示:">-->
+<!--                    <Switch v-model="editData.IsVisible" />-->
+<!--                </FormItem>-->
             </Form>
         </Modal>
     </div>
@@ -99,7 +113,7 @@ export default {
                 },
                 {
                     title: '操作',
-                    key: 'date',
+                    key: 'action',
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -107,9 +121,6 @@ export default {
                                 props: {
                                     type: 'primary',
                                     size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
                                 },
                                 on: {
                                     click: () => {
@@ -122,12 +133,26 @@ export default {
                                     type: 'error',
                                     size: 'small'
                                 },
+                                style: {
+                                    margin: '0 5px'
+                                },
                                 on: {
                                     click: () => {
                                         this.remove(params);
                                     }
                                 }
-                            }, '删除')
+                            }, '删除'),
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.config(params);
+                                    }
+                                }
+                            }, '配置')
                         ]);
                     }
                 }
@@ -144,7 +169,8 @@ export default {
     methods:{
         // 获取菜单管理数据
         getQueryNavMenuList(){
-          this.$api.homePageApi.getQueryNavMenuList(1000,1).then(data=>{
+          let params = {pageSize: 1000,pageIndex:1};
+          this.$api.homePageApi.getQueryNavMenuList(params).then(data=>{
             this.menuData = data.data.Data;
           });
         },
@@ -181,11 +207,26 @@ export default {
         },
         // 编辑确认
         editEnter(){
+            // 新增
             if(this.isNewOrChange == 'new'){
-                this.menuData.push(this.editData);
+                if(this.editData){
+                    this.$api.homePageApi.getAddMenuExecutive(this.editData).then(data=>{
+                        if(data.data.code == '0'){
+                            this.menuData.unshift(this.editData);
+                            this.$messagebox.success('新增成功！');
+                        }
+                    });
+                }
             }
+            // 修改
             else if(this.isNewOrChange == 'change'){
-                this.$set(this.menuData,this.editDataIndex,this.editData);
+                this.$api.homePageApi.getUpdateMenuExecutive(this.editData).then(data=>{
+                    if(data.data.code){
+                        this.$set(this.menuData,this.editDataIndex,this.editData);
+                        this.$messagebox.success('修改成功！')
+                    }
+                });
+
             }
             this.popEdit = false;
             this.editData = {};
@@ -197,6 +238,10 @@ export default {
             this.editData = {};
             this.editDataIndex = '';
             this.$Message.info('cancel');
+        },
+        // 配置
+        config(params){
+
         }
     }
 }

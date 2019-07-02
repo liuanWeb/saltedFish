@@ -21,7 +21,7 @@
 <!--                <a class="name">大德<Icon type="ios-arrow-down" /></a>-->
                 <Dropdown class="name" placement="bottom-end">
                     <a href="javascript:void(0)">
-                        大德
+                        {{name}}
                         <Icon type="ios-arrow-down"></Icon>
                     </a>
                     <DropdownMenu slot="list">
@@ -48,7 +48,7 @@ export default {
     },
     data () {
         return {
-
+            name: localStorage.getItem('token').substring(0,6)
         }
     },
     methods: {

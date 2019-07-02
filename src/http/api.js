@@ -7,11 +7,21 @@ const loginPageApi = {
 };
 
 const homePageApi = {
+    // 用户菜单
     getUserMenu(){
         return post('/apis/LoginAPI/UserMenu');
     },
-    getQueryNavMenuList(pageSize,pageIndex){
-        return post('/apis/SysSetAPI/QueryNavMenuList',{pageSize: pageSize,pageIndex:pageIndex});
+    // 菜单管理-菜单列表
+    getQueryNavMenuList(params){
+        return post('/apis/SysSetAPI/QueryNavMenuList',params);
+    },
+    // 菜单管理-菜单列表-新增
+    getAddMenuExecutive(params){
+        return post('/apis/SysSetAPI/AddMenuExecutive',params);
+    },
+    // 菜单管理-菜单列表-修改
+    getUpdateMenuExecutive(params){
+        return post('/apis/SysSetAPI/UpdateMenuExecutive',params);
     }
 }
 
